@@ -5,14 +5,14 @@ const ZAI_KEY = process.env.ZAI_KEY;
 console.log("✅ Server running");
 
 async function test() {
-  const response = await fetch("https://api.z.ai/v1/chat/completions", {
+  const response = await fetch("https://open.bigmodel.cn/api/paas/v4/chat/completions", {
     method: "POST",
     headers: {
       Authorization: `Bearer ${ZAI_KEY}`,
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      model: "glm-4.5",
+      model: "glm-4",
       messages: [
         {
           role: "system",
