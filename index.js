@@ -1,10 +1,24 @@
+import WebSocket from "ws";
 import fetch from "node-fetch";
-import http from "http";
 
 const ZAI_KEY = process.env.ZAI_KEY;
 
-const server = http.createServer(async (req, res) => {
-  if (req.url === "/chat") {
+const ws = new WebSocket("wss://societyai.com/ws", {
+  headers: {
+    "x-agent-id": "dataonly"
+  }
+});
+
+ws.on("open", () => {
+  console.log("🟢 Connected to Society AI as dataonly");
+});
+
+ws.on("message", async (data) => {
+  try {
+    const msg = JSON.parse(data.toString());
+
+    const userMessage = msg.input || "Hello";
+
     const response = await fetch("https://open.bigmodel.cn/api/paas/v4/chat/completions", {
       method: "POST",
       headers: {
@@ -20,22 +34,25 @@ const server = http.createServer(async (req, res) => {
           },
           {
             role: "user",
-            content: "Hello",
+            content: userMessage,
           },
         ],
       }),
     });
 
-    const data = await response.json();
+    const result = await response.json();
 
-    res.writeHead(200, { "Content-Type": "application/json" });
-    res.end(JSON.stringify(data));
-  } else {
-    res.writeHead(200);
-    res.end("DataOnly Agent Running");
+    ws.send(
+      JSON.stringify({
+        output: result.choices?.[0]?.message?.content || "No response",
+      })
+    );
+
+  } catch (err) {
+    console.error("❌ Error:", err);
   }
 });
 
-server.listen(process.env.PORT || 3000, () => {
-  console.log("🚀 Server running on port 3000");
+ws.on("close", () => {
+  console.log("🔴 Disconnected from Society AI");
 });
