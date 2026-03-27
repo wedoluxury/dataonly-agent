@@ -26,8 +26,18 @@ async function test() {
     }),
   });
 
-  const result = await response.json();
-  console.log("ZAI RESPONSE:", result);
+const text = await response.text();
+console.log("RAW RESPONSE:", text);
+
+let result;
+try {
+  result = JSON.parse(text);
+} catch (e) {
+  console.error("❌ Not JSON response");
+  return;
+}
+
+console.log("ZAI RESPONSE:", result);
 }
 
 test();
