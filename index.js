@@ -12,7 +12,7 @@ async function test() {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      model: "glm-4",
+      model: "glm-4-flash,
       messages: [
         {
           role: "system",
