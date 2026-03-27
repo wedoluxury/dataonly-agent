@@ -1,0 +1,9 @@
+{
+  "name": "dataonly-agent",
+  "version": "1.0.0",
+  "type": "module",
+  "dependencies": {
+    "ws": "^8.0.0",
+    "node-fetch": "^3.0.0"
+  }
+}
