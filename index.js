@@ -3,12 +3,14 @@ import fetch from "node-fetch";
 
 const ZAI_KEY = process.env.ZAI_KEY;
 
-const ws = new WebSocket("wss://societyai.com/ws", {
+const ws = new WebSocket("wss://societyai.com/api/ws", {
   headers: {
     "x-agent-id": "dataonly"
   }
 });
-
+ws.on("error", (err) => {
+  console.error("WebSocket error:", err.message);
+});
 ws.on("open", () => {
   console.log("🟢 Connected to Society AI as dataonly");
 });
